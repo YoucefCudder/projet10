@@ -17,8 +17,8 @@ class Project(models.Model):
 
 class Contributor(models.Model):
     user_id = models.IntegerField()
-    # project_id = models.IntegerField(to=Project, on_delete=models.CASCADE)
-    # permission = models.ChoiceField()
+    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    # permission = models.CharField() # voir les choix multiples charfield
     role = models.CharField(max_length=20)
 
 
@@ -27,7 +27,7 @@ class Issue(models.Model):
     description = models.CharField(max_length=200)
     tag = models.CharField(max_length=200)
     priority = models.CharField(max_length=200)
-    # project_id = models.IntegerField(to=Project, on_delete=models.CASCADE)
+    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     status = models.CharField(max_length=200)
     author_user_id = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
