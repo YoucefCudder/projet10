@@ -3,13 +3,24 @@ from django.db import models
 
 
 # Create your models here.
+BACKEND = 'BACKEND'
+FRONTEND = 'FRONTEND'
+IOS = 'IOS'
+ANDROID = 'ANDROID'
+TYPES_CHOICES = (
+    (BACKEND, 'Back-end'),
+    (FRONTEND, 'Front-end'),
+    (IOS, 'iOS'),
+    (ANDROID, 'Android')
+)
+
 
 class Project(models.Model):
     objects = models.Manager()
-    project_id = models.IntegerField()
+    # project_id = models.IntegerField()
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=2000)
-    type = models.CharField(max_length=200)
+    type = models.CharField(max_length=200, choices=TYPES_CHOICES)
     author_user_id = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
@@ -17,7 +28,10 @@ class Project(models.Model):
 
 class Contributor(models.Model):
     user_id = models.IntegerField()
-    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    project_id = models.ForeignKey(
+        to=Project, on_delete=models.CASCADE,
+        related_name='contributors'
+    )
     # permission = models.CharField() # voir les choix multiples charfield
     role = models.CharField(max_length=20)
 
@@ -45,8 +59,9 @@ class Comment(models.Model):
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
     issue_id = models.ForeignKey(
-        to=Issue, on_delete=models.CASCADE
+        to=Issue, on_delete=models.CASCADE,
+        related_name='comments'
     )
-    created_time = models.DateTimeField()
+    created_time = models.DateTimeField(auto_now_add=True)
 
 # CLASS USER ????
