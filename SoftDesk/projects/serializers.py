@@ -6,14 +6,21 @@ from .models import Project, Contributor, Issue, Comment
 class ProjectSerializer(ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'type', 'author_user_id')
-        extra_kwargs = {'author_user_id': {'read_only': True}}
+        fields = ( 'title', 'description', 'type')
+        extra_kwargs = {'author_user': {'read_only': True}}
+
+
+class ProjectDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Project
+        fields ='__all__'
+
 
 
 class ContributorsSerializer(ModelSerializer):
     class Meta:
         model = Contributor
-        fields = ["id", "user_id", "project_id", "role"]
+        fields = ["id", "author_user", "project", "role"]
 
 
 class IssuesSerializer(ModelSerializer):
@@ -25,10 +32,10 @@ class IssuesSerializer(ModelSerializer):
             "description",
             "tag",
             "priority",
-            "project_id",
+            "project",
             "status",
-            "author_user_id",
-            "assignee_user_id",
+            "author_user",
+            "assignee_user",
             "created_time",
         ]
 
@@ -36,6 +43,6 @@ class IssuesSerializer(ModelSerializer):
 class CommentsSerializer(ModelSerializer):
     class Meta:
         model = Comment
-        fields = ["id", "description", "author_user_id",
-                  "issue_id", "created_time"
+        fields = ["id", "description", "author_user",
+                  "issue", "created_time"
                   ]

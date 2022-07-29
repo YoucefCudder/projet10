@@ -23,8 +23,9 @@ class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=2000)
     type = models.CharField(max_length=200, choices=TYPES_CHOICES)
-    author_user_id = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    author_user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+
     )
 
 
@@ -49,12 +50,12 @@ class Issue(models.Model):
     description = models.CharField(max_length=200)
     tag = models.CharField(max_length=200)
     priority = models.CharField(max_length=200)
-    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     status = models.CharField(max_length=200, choices=STATUS)
-    author_user_id = models.ForeignKey(
+    author_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    assignee_user_id = models.ForeignKey(
+    assignee_user = models.ForeignKey(
         to=Contributor, on_delete=models.CASCADE
     )
     created_time = models.DateTimeField()
@@ -62,7 +63,7 @@ class Issue(models.Model):
 
 class Comment(models.Model):
     description = models.CharField(max_length=2000)
-    author = models.ForeignKey(
+    author_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
     issue = models.ForeignKey(
@@ -70,4 +71,4 @@ class Comment(models.Model):
     )
     created_time = models.DateTimeField(auto_now_add=True)
 
-# CLASS USER ????
+
