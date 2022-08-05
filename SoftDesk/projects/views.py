@@ -1,19 +1,17 @@
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from projects.models import Project, Contributor
-from projects.serializers import ProjectSerializer, ProjectDetailSerializer
-from users.tests import get_current_user
+from projects.models import Project, Contributor, Issue
+from projects.serializers import ProjectSerializer, ProjectDetailSerializer, \
+    IssueSerializer
 
 
 class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     detail_serializer_class = ProjectDetailSerializer
-    queryset = Project.objects.all()
 
+    def get_queryset(self, *args, **kwargs):
+        projects_id = [contributor.project.id for contributor in
+                       Contributor.objects.filter(user=self.request.user)]
+        return Project.objects.filter(id__in=projects_id)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -21,25 +19,18 @@ class ProjectViewSet(ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        print(self.request.user)
+        project = serializer.save(author_user=self.request.user)
+        Contributor(user=self.request.user, project=project,
+                    role='AUTHOR').save()
+
+
+class IssueViewSet(ModelViewSet):
+    serializer_class = IssueSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        project_id = [issue.project.id for issue in
+                      Issue.objects.filter(user=self.request.user)]
+        return Issue.objects.filter(id__in=project_id)
+
+    def perform_create(self, serializer):
         serializer.save(author_user=self.request.user)
-
-
-
-    """def post(self, request):
-        local_user = request.user
-        project = Project(
-            title=request.data["title"],
-            description=request.data["description"],
-            project_type=request.data["project_type"],
-            author_user_id=local_user,
-        )
-        project.save()
-        serialized_project = ProjectSerializer(project)
-        return Response(serialized_project.data)
-
-"""
-
-
-
-

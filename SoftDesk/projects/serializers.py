@@ -6,7 +6,7 @@ from .models import Project, Contributor, Issue, Comment
 class ProjectSerializer(ModelSerializer):
     class Meta:
         model = Project
-        fields = ( 'title', 'description', 'type')
+        fields = ('id',  'title', 'description', 'type')
         extra_kwargs = {'author_user': {'read_only': True}}
 
 
@@ -23,7 +23,7 @@ class ContributorsSerializer(ModelSerializer):
         fields = ["id", "author_user", "project", "role"]
 
 
-class IssuesSerializer(ModelSerializer):
+class IssueSerializer(ModelSerializer):
     class Meta:
         model = Issue
         fields = [

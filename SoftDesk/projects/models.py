@@ -31,6 +31,7 @@ class Project(models.Model):
 
 class Contributor(models.Model):
     ROLES = [('AUTHOR', 'AUTHOR'), ('CONTRIBUTOR', 'CONTRIBUTOR')]
+    objects = models.Manager()
 
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
@@ -45,7 +46,7 @@ class Contributor(models.Model):
 
 class Issue(models.Model):
     STATUS = [('to_do', 'to_do'), ('ongoing', 'ongoing'), ('done', 'done')]
-
+    objects = models.Manager()
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     tag = models.CharField(max_length=200)
@@ -62,6 +63,8 @@ class Issue(models.Model):
 
 
 class Comment(models.Model):
+    objects = models.Manager()
+
     description = models.CharField(max_length=2000)
     author_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
