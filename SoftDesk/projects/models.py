@@ -46,11 +46,14 @@ class Contributor(models.Model):
 
 class Issue(models.Model):
     STATUS = [('to_do', 'to_do'), ('ongoing', 'ongoing'), ('done', 'done')]
+    TAG_CHOICES = [('bug', 'bug'), ('upgrade', 'upgrade'), ('task', 'task')]
+    PRIORITY_CHOICES = [('low', 'low'), ('Middle', 'middle'), ('high', 'high')]
+
     objects = models.Manager()
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
-    tag = models.CharField(max_length=200)
-    priority = models.CharField(max_length=200)
+    tag = models.CharField(max_length=200, choices=TAG_CHOICES)
+    priority = models.CharField(max_length=200, choices=PRIORITY_CHOICES)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     status = models.CharField(max_length=200, choices=STATUS)
     author_user = models.ForeignKey(
@@ -59,7 +62,7 @@ class Issue(models.Model):
     assignee_user = models.ForeignKey(
         to=Contributor, on_delete=models.CASCADE
     )
-    created_time = models.DateTimeField()
+    created_time = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):

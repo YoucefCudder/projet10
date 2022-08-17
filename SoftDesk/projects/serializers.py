@@ -27,17 +27,10 @@ class IssueSerializer(ModelSerializer):
     class Meta:
         model = Issue
         fields = [
-            "id",
-            "title",
-            "description",
-            "tag",
-            "priority",
-            "project",
-            "status",
-            "author_user",
-            "assignee_user",
-            "created_time",
+            "id", "title", "description", "tag", "priority", "project",
+            "status", "author_user", "assignee_user",
         ]
+        extra_kwargs = {'created_time': {'read_only': True}}
 
 
 class CommentsSerializer(ModelSerializer):
