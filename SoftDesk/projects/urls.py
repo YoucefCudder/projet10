@@ -6,8 +6,8 @@ from rest_framework_nested.routers import NestedSimpleRouter
 from projects import views
 from django.urls import path, include
 
-from projects.views import ProjectViewSet, IssueViewSet, CommentViewSet
-
+from projects.views import ProjectViewSet, IssueViewSet, CommentViewSet, \
+    ContributorViewSet
 
 router = routers.DefaultRouter()
 
@@ -21,6 +21,9 @@ router.register(
 
 issues_router = NestedSimpleRouter(router, r'projects', 'projects')
 issues_router.register(r'issues', IssueViewSet, basename='issues')
+
+contributors_router = NestedSimpleRouter(router, r'projects', 'projects')
+contributors_router.register(r'users', ContributorViewSet, basename='contributors')
 
 
 comments_router = NestedSimpleRouter(issues_router, r'issues', 'issues')
@@ -51,6 +54,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(issues_router.urls)),
     path('', include(comments_router.urls)),
+    path('', include(contributors_router.urls)),
 
     # path('projects/<uuid:pk>/issues', IssueViewSet.as_view({'post': 'create'}))
 

@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from projects.models import Project, Contributor, Issue, Comment
@@ -47,11 +46,10 @@ class IssueViewSet(ModelViewSet):
         # return Issue.objects.filter(id__in=project_id)
         return Issue.objects.filter(project=int(self.kwargs['nested_1_pk']))
 
-
     def perform_create(self, serializer):
         # project_id = Project.objects.get(
         #     [issue.project.id for issue in Issue.objects.filter(author_user=self.request.user)])
-        project =  Project.objects.get(id=int(self.kwargs['nested_1_pk']))
+        project = Project.objects.get(id=int(self.kwargs['nested_1_pk']))
         serializer.save(project=project, author_user=self.request.user)
         # Contributor(user=self.request.user, project=project,
         #             role='AUTHOR').save()
@@ -71,9 +69,6 @@ class CommentViewSet(ModelViewSet):
         # return Issue.objects.filter(id__in=issue)
         return Comment.objects.filter(issue=int(self.kwargs['nested_2_pk']))
 
-
-
-
     def perform_create(self, serializer):
         # issue = self.kwargs.get('issue')
         # project = Project.objects.get(self.kwargs['id'])
@@ -84,7 +79,10 @@ class CommentViewSet(ModelViewSet):
         # Contributor(user=self.request.user, project=project,
         #             role='AUTHOR').save()
 
-        serializer.save(author_user=self.request.user, issue=Issue.objects.get(id=self.kwargs['nested_2_pk']))
+        serializer.save(author_user=self.request.user,
+                        issue=Issue.objects.get(id=self.kwargs['nested_2_pk']))
+
+
 #
 # class UserViewSet(ViewSet):
 #     """
@@ -105,8 +103,9 @@ class CommentViewSet(ModelViewSet):
 
 class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorsSerializer
-    permission_classes = [IsAuthenticated]
+
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        id_project = ""
-        return Contributor.objects.filter(projet=id_project)
+        return Contributor.objects.filter(
+            project=int(self.kwargs['nested_1_pk']))
