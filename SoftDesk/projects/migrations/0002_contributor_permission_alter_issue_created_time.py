@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0001_initial'),
+        ("projects", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contributor',
-            name='permission',
-            field=models.CharField(choices=[('ALL ACCESS', 'ALL ACCESS'), ('RESTRICTED', 'RESTRICTED')], default='restricted', max_length=50),
+            model_name="contributor",
+            name="permission",
+            field=models.CharField(
+                choices=[("ALL ACCESS", "ALL ACCESS"), ("RESTRICTED", "RESTRICTED")],
+                default="restricted",
+                max_length=50,
+            ),
         ),
         migrations.AlterField(
-            model_name='issue',
-            name='created_time',
+            model_name="issue",
+            name="created_time",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

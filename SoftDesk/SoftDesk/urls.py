@@ -21,10 +21,8 @@ from rest_framework_nested import routers
 from projects.views import ProjectViewSet, IssueViewSet
 
 
-
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
-    path('api/', include('projects.urls'), name='projects'),
-    path('api/', include('users.urls'), name='users'),
-
+    path("admin/", admin.site.urls, name="admin"),
+    path("api/", include("projects.urls"), name="projects"),
+    path("api/", include("users.urls"), name="users"),
 ]

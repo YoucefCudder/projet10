@@ -9,46 +9,45 @@ from django.db import models
 
 
 class Project(models.Model):
-    BACKEND = 'BACKEND'
-    FRONTEND = 'FRONTEND'
-    IOS = 'IOS'
-    ANDROID = 'ANDROID'
+    BACKEND = "BACKEND"
+    FRONTEND = "FRONTEND"
+    IOS = "IOS"
+    ANDROID = "ANDROID"
     TYPES_CHOICES = (
-        (BACKEND, 'Back-end'),
-        (FRONTEND, 'Front-end'),
-        (IOS, 'iOS'),
-        (ANDROID, 'Android')
+        (BACKEND, "Back-end"),
+        (FRONTEND, "Front-end"),
+        (IOS, "iOS"),
+        (ANDROID, "Android"),
     )
     objects = models.Manager()
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=2000)
     type = models.CharField(max_length=200, choices=TYPES_CHOICES)
     author_user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
 
 
 class Contributor(models.Model):
-    ROLES = [('AUTHOR', 'AUTHOR'), ('CONTRIBUTOR', 'CONTRIBUTOR')]
-    PERMISSION = [('ALL ACCESS', 'ALL ACCESS'), ('RESTRICTED', 'RESTRICTED')]
+    ROLES = [("AUTHOR", "AUTHOR"), ("CONTRIBUTOR", "CONTRIBUTOR")]
+    PERMISSION = [("ALL ACCESS", "ALL ACCESS"), ("RESTRICTED", "RESTRICTED")]
     objects = models.Manager()
 
-    user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(
-        to=Project, on_delete=models.CASCADE,
-        related_name='contributors'
+        to=Project, on_delete=models.CASCADE, related_name="contributors"
     )
-    permission = models.CharField(max_length=50, choices=PERMISSION, default='RESTRICTED') # voir les choix multiples charfield
+    permission = models.CharField(
+        max_length=50, choices=PERMISSION, default="RESTRICTED"
+    )  # voir les choix multiples charfield
     role = models.CharField(max_length=20, choices=ROLES)
 
 
 class Issue(models.Model):
-    STATUS = [('to_do', 'to_do'), ('ongoing', 'ongoing'), ('done', 'done')]
-    TAG_CHOICES = [('bug', 'bug'), ('upgrade', 'upgrade'), ('task', 'task')]
-    PRIORITY_CHOICES = [('low', 'low'), ('Middle', 'middle'), ('high', 'high')]
+    STATUS = [("to_do", "to_do"), ("ongoing", "ongoing"), ("done", "done")]
+    TAG_CHOICES = [("bug", "bug"), ("upgrade", "upgrade"), ("task", "task")]
+    PRIORITY_CHOICES = [("low", "low"), ("Middle", "middle"), ("high", "high")]
 
     objects = models.Manager()
     title = models.CharField(max_length=200)
@@ -60,9 +59,7 @@ class Issue(models.Model):
     author_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    assignee_user = models.ForeignKey(
-        to=Contributor, on_delete=models.CASCADE
-    )
+    assignee_user = models.ForeignKey(to=Contributor, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
 
 
@@ -73,9 +70,5 @@ class Comment(models.Model):
     author_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    issue = models.ForeignKey(
-        to=Issue, on_delete=models.CASCADE
-    )
+    issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
-
-
