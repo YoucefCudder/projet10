@@ -19,7 +19,8 @@ class ProjectDetailSerializer(ModelSerializer):
 class ContributorsSerializer(ModelSerializer):
     class Meta:
         model = Contributor
-        fields = ["id", "user", "project", "role", "permission"]
+        fields = ["id", "user", "role", "permission"]
+        extra_kwargs = {"project": {"read_only": True}}
 
 
 class IssueSerializer(ModelSerializer):
