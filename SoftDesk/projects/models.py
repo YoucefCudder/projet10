@@ -41,7 +41,7 @@ class Contributor(models.Model):
         to=Project, on_delete=models.CASCADE, related_name="contributors"
     )
     permission = models.CharField(
-        max_length=50, choices=PERMISSION, default="RESTRICTED"
+        max_length=50, choices=PERMISSION, default="ALL ACCESS"
     )  # voir les choix multiples charfield
     role = models.CharField(max_length=20, choices=ROLES)
 
