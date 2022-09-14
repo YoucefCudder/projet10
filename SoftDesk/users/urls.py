@@ -1,4 +1,3 @@
-from django.template.defaulttags import url
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import MyObtainTokenPairView, RegisterView

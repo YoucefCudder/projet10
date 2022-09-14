@@ -34,7 +34,9 @@ class Contributor(models.Model):
     PERMISSION = [("ALL ACCESS", "ALL ACCESS"), ("RESTRICTED", "RESTRICTED")]
     objects = models.Manager()
 
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
     project = models.ForeignKey(
         to=Project, on_delete=models.CASCADE, related_name="contributors"
     )

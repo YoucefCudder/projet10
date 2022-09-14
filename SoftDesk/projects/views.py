@@ -1,8 +1,12 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from projects.models import Project, Contributor, Issue, Comment
-from projects.permissions import ProjectPermission, IssuePermission, \
-    CommentPermission, ContributorPermission
+from projects.permissions import (
+    ProjectPermission,
+    IssuePermission,
+    CommentPermission,
+    ContributorPermission,
+)
 from projects.serializers import (
     ProjectSerializer,
     ProjectDetailSerializer,
@@ -20,7 +24,9 @@ class ProjectViewSet(ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         projects_id = [
             contributor.project.id
-            for contributor in Contributor.objects.filter(user=self.request.user)
+            for contributor in Contributor.objects.filter(
+                user=self.request.user
+            )
         ]
         return Project.objects.filter(id__in=projects_id)
 
@@ -31,7 +37,8 @@ class ProjectViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         project = serializer.save(author_user=self.request.user)
-        Contributor(user=self.request.user, project=project, role="AUTHOR").save()
+        Contributor(user=self.request.user,
+                    project=project, role="AUTHOR").save()
 
 
 class IssueViewSet(ModelViewSet):
@@ -65,8 +72,11 @@ class ContributorViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, ContributorPermission]
 
     def get_queryset(self):
-        return Contributor.objects.filter(project=int(self.kwargs["nested_1_pk"]))
-
+        return Contributor.objects.filter(
+            project=int(self.kwargs["nested_1_pk"])
+        )
 
     def perform_create(self, serializer):
-        serializer.save(project=Project.objects.get(id=self.kwargs["nested_1_pk"]))
+        serializer.save(project=Project.objects.get(
+            id=self.kwargs["nested_1_pk"])
+        )
