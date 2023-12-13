@@ -6,7 +6,7 @@
 git clone https://github.com/YoucefCudder/projet10.git
 cd projet10
 python -m venv .env
-source .env/scripts/activate
+ .env/scripts/activate
 pip install -r requirements.txt
 python manage.py runserver
 ````
